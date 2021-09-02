@@ -54,20 +54,20 @@ get_inat_obs <- function(query = NULL, taxon_name = NULL, taxon_id = NULL,
                          place_id = NULL, quality = NULL, geo = NULL,
                          year = NULL, month = NULL, day = NULL, bounds = NULL,
                          maxresults = 100, meta = FALSE) {
-  
+
   # check Internet connection
   if (!curl::has_internet()) {
     message("No Internet connection.")
     return(invisible(NULL))
   }
-  
+
   base_url <- "http://www.inaturalist.org/"
   # check that iNat can be reached
   if (httr::http_error(base_url)) { # TRUE: 400 or above
     message("iNaturalist API is unavailable.")
     return(invisible(NULL))
   }
-  
+
   ## Parsing and error-handling of input strings
   arg_list <- list(query, taxon_name, taxon_id, place_id, quality, geo,
                    year, month, day, bounds)
@@ -153,13 +153,13 @@ get_inat_obs <- function(query = NULL, taxon_name = NULL, taxon_id = NULL,
                   nelng = bounds_prep[1,2])
     }
 
-    if(length(bounds) != 4){stop("Bounding box specifications must have 4 coordinates.")}
+    if (length(bounds) != 4) {stop("Bounding box specifications must have 4 coordinates.")}
     search <- paste0(search, "&swlat=", bounds[1], "&swlng=", bounds[2],
                      "&nelat=", bounds[3], "&nelng=", bounds[4])
 
   }
-  if (maxresults > 10000) {
-    stop("Please provide a maxresults value <= 10000.")
+  if (maxresults > 100000) {
+    stop("Please provide a maxresults value <= 100000.")
   }
 
   q_path <- "observations.csv"
